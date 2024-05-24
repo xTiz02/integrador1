@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:fragment="footer">
+	<!-- footer content -->
+	<footer>
+		<div class="pull-right">Sistema de gestión de prestamos - 2023</div>
+		<div class="clearfix">
+			<span>Roles: </span><span sec:authentication="principal.authorities"></span>
+		</div>
+	</footer>
+	<!-- /footer content -->
+</th:block>
+
+</html>

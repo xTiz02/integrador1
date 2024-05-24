@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Miembros Formulario</title>
+
+    <th:block th:replace="layouts/styles :: common"></th:block>
+
+</head>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+        <th:block th:replace="layouts/sidemenu :: menu"></th:block>
+        <th:block th:replace="layouts/topmenu :: menu"></th:block>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2 th:text="${titulo}" >Titulo</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="alert alert-success alert-dismissible fade in" role="alert" th:if="${completado}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <span th:text="${completado}"></span>
+                            </div>
+                            <br />
+                            <form id="member-form" th:action="@{/miembro/guardar}" method="post" th:object="${miembro}" class="form-horizontal form-label-left">
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo <span class="required">*</span></label>
+                                    <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <select th:field="*{tipo}" class="form-control">
+                                            <option th:each="mt : ${tipos}" th:value="${mt}" th:text="${mt}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="primerNombre">Primer Nombre <span class="required">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{primerNombre}" class="form-control col-md-7 col-xs-12" id="primerNombre">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('primerNombre')}" th:errors="*{primerNombre}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="segundoNombre">Segundo Nombre <span class="required">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{segundoNombre}" class="form-control col-md-7 col-xs-12" id="segundoNombre">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('segundoNombre')}" th:errors="*{segundoNombre}"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="apellido">Apellido</label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{apellido}" class="form-control col-md-7 col-xs-12" id="apellido">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dni">DNI <span class="required">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{dni}" class="form-control col-md-7 col-xs-12" id="dni">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Genero <span class="required">*</span></label>
+                                    <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <select th:field="*{genero}" class="form-control">
+                                            <option th:each="g : ${generos}" th:text="${g}" th:value="${g.charAt(0)}"></option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dateOfBirth">Fecha Nac <span class="required">*</span></label>
+                                    <div class="col-md-2 col-sm-2 col-xs-12">
+
+                                        <input type="date" class="form-control" th:field="*{fechaNac}" name="dateOfBirth" id="dateOfBirth">
+
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span id="dobErr"></span>
+                                        <span th:if="${#fields.hasErrors('fechaNac')}" th:errors="*{fechaNac}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="contacto">Contacto # </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{contacto}" class="form-control col-md-7 col-xs-12" id="contacto">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('contacto')}" th:errors="*{contacto}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{email}" class="form-control col-md-7 col-xs-12" id="email">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <th:block th:if="${id==null}">
+                                            <button class="btn btn-primary" type="reset">Reset</button>
+                                        </th:block>
+                                        <th:block th:if="${id!=null}">
+                                            <button class="btn btn-primary" type="button" id="gotoListBtn" >Ir a la lista</button>
+                                        </th:block>
+                                        <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <th:block th:replace="layouts/footer :: footer"></th:block>
+
+    </div>
+</div>
+
+<th:block th:replace="layouts/scripts :: common"></th:block>
+<!-- jquery.inputmask -->
+<script th:src="@{/custom/js/miembro/form.js}"></script>
+</body>
+</html>

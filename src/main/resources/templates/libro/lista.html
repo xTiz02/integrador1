@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spark LMS - Book List</title>
+
+    <th:block th:replace="layouts/styles :: common"></th:block>
+    <th:block th:replace="layouts/styles :: datatable"></th:block>
+    <style>
+        .fila{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+        <th:block th:replace="layouts/sidemenu :: menu"></th:block>
+        <th:block th:replace="layouts/topmenu :: menu"></th:block>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Lista de libros</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert" th:if="${error}">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <span th:text="${mensaje}"></span>
+                        </div>
+
+                        <table id="datatable"
+                               class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Categorías</th>
+                                <th>Tag</th>
+                                <th style="width: 250px;">Titulo</th>
+                                <th style="width: 150px;">Autor</th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" style="width: 80px;">Acción</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="b : ${libros}">
+                                <td>
+                                    <ul th:each="c : ${b.categorias}">
+                                        <li th:text="${c.nombre}"></li>
+                                    </ul>
+                                </td>
+                                <td th:text="${b.tag}"></td>
+                                <td th:text="${b.titulo}"></td>
+                                <td th:text="${b.autor}"></td>
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a th:href="@{'/libro/editar/' + ${b.id}}"><i class="fa fa-edit"></i></a>
+                                    <a th:data-book-id="${b.id}"data-toggle="modal" data-target="#viewBookModal" onclick="viewBook(this)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a th:href="@{'/libro/nuevaUnidad/' + ${b.id}}"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                                    <a th:data-unit-isbn="${b.isbn}"data-toggle="modal" data-target="#viewBooksModal" onclick="viewAllBooks(this)"><i class="fa fa-list" aria-hidden="true"></i></a>
+                                    <a data-toggle="modal" data-target=".remove-libro-modal" onclick="eliminarLibroDialog(this);"
+                                       th:data-libro-id="${b.id}" th:data-libro-name="${b.titulo}"  data-tipo="libro" style="cursor: pointer;">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+        <div class="modal fade" id="viewBookModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="staticBackdropLabel">Libro : <span id="title-book-name"></span></h4>
+
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row" >
+                            <div class="col-12 m-10">
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Autor * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-autor" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Tag * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-tag" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Editorial * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-editorial" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Stock Total * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-stockTotal" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Stock Disponible * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-stockDisponible" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Stock Prestado * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-stockPrestado" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Isbn * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-isbn" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Estado * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-estado" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Fecha Publicación * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-fechaPublicacion" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row fila">
+                                    <label class="col-sm-4 col-form-label">Categorías * :</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="book-categorias" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="modal fade remove-libro-modal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Eliminar Libro</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal" onclick="resetRemoveModal()">Cancelar</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="viewBooksModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="staticBackdropLabel2">Lista de Unidades</h4>
+
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="table-responsive">
+                            <table class="table" id="tablaDeUnidades">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Isbn</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Ingreso</th>
+                                        <th scope="col">Ubicación</th>
+                                        <th scope="col">Nota</th>
+                                        <th scope="col">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cuerpo-unidades">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:replace="layouts/footer :: footer"></th:block>
+
+    </div>
+</div>
+
+<th:block th:replace="layouts/scripts :: common"></th:block>
+<th:block th:replace="layouts/scripts :: datatable"></th:block>
+<script th:src="@{/custom/js/libro/list.js}"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spark LMS - Book List</title>
+
+    <th:block th:replace="layouts/styles :: common"></th:block>
+    <th:block th:replace="layouts/styles :: datatable"></th:block>
+
+</head>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+        <th:block th:replace="layouts/sidemenu :: menu"></th:block>
+        <th:block th:replace="layouts/topmenu :: menu"></th:block>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2 th:text="${titulo}">Titulo</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="alert alert-success alert-dismissible fade in" role="alert" th:if="${completado!=null}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <span th:text="${completado}"></span>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert" th:if="${error!=null}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <span th:text="${error}"></span>
+                            </div>
+                            <br/>
+                            <form th:action="@{/libroUnidad/guardar}" method="post" th:object="${libroUnidad}" class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="isbn">Isbn <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" th:field="*{isbn}" class="form-control col-md-7 col-xs-12" id="isbn" th:readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fechaIngreso">Fecha Ingreso <span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="date" class="form-control col-md-7 col-xs-12" id="fechaIngreso" th:field="*{fechaIngreso}" th:readonly="*{estado}">
+
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('fechaIngreso')}" th:errors="*{fechaIngreso}"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ubicacion">Ubicación <span class="required">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" th:field="*{ubicacion}" class="form-control col-md-7 col-xs-12" id="ubicacion">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('ubicacion')}" th:errors="*{ubicacion}"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nota">Nota <span class="required">*</span></label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <textarea type="text" th:field="*{nota}" class="form-control col-md-7 col-xs-12" id="nota"></textarea>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 mt-5">
+                                        <span th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button class="btn btn-primary" type="button" id="gotoListBtn" >Ir a la lista</button>
+                                        <button type="submit" class="btn btn-success">Guardar</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+
+
+
+
+
+
+
+
+
+
+        <th:block th:replace="layouts/footer :: footer"></th:block>
+
+    </div>
+</div>
+
+<th:block th:replace="layouts/scripts :: common"></th:block>
+<th:block th:replace="layouts/scripts :: datatable"></th:block>
+<script th:src="@{/custom/js/libroUnidad/form.js}"></script>
+</body>
+</html>

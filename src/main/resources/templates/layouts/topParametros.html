@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+
+<th:block th:fragment="parametros">
+	<!-- top tiles start -->
+	<div class="row tile_count">
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top "><i class="fa fa-user"></i>  Miembros</span>
+			<div class="count green" th:text="${topParametros.totalMiembros}"></div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top "><i class="fa fa-user"></i>  Padres</span>
+			<div class="count" th:text="${topParametros.totalPadres}"></div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top "><i class="fa fa-user"></i>  Estudiantes</span>
+			<div class="count" th:text="${topParametros.totalEstudiantes}"></div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-sitemap"></i>  Categorias</span>
+			<div class="count green" th:text="${topParametros.totalCategorias}"></div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top "><i class="fa fa-book"></i>  Libros</span>
+			<div class="count" th:text="${topParametros.totalLibros}"></div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+			<span class="count_top"><i class="fa fa-cart-arrow-down"></i> Prestamos</span>
+			<div class="count green" th:text="${topParametros.totalLibrosPrestados}"></div>
+		</div>
+	</div>
+	<!-- top tiles end -->
+
+</th:block>
+
+</html>

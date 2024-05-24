@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista Categoría</title>
+
+  <th:block th:replace="layouts/styles :: common"></th:block>
+  <th:block th:replace="layouts/styles :: datatable"></th:block>
+
+</head>
+<body class="nav-md">
+<div class="container body">
+  <div class="main_container">
+
+    <th:block th:replace="layouts/sidemenu :: menu"></th:block>
+    <th:block th:replace="layouts/topmenu :: menu"></th:block>
+
+    <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Lista de categorías</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            <div class="alert alert-danger alert-dismissible fade in" role="alert" th:if="${error}">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+              <span th:text="${mensaje}"></span>
+            </div>
+
+            <table id="datatable"
+                   class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th style="width: 50px;">Categoría</th>
+                <th style="width: 50px;">Nombre</th>
+                <th>Nota</th>
+                <th style="width: 200px;">Fecha(Y:M:D H:M:S)</th>
+                <th  sec:authorize="hasRole('ROLE_ADMIN')" style="width: 50px;">Accion</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="c : ${categorias}">
+                <td th:text="${c.nombre}"></td>
+                <td th:text="${c.nombreCorto}"></td>
+                <td th:text="${c.notas}"></td>
+                <td th:text="${c.fechaCreado}"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                  <a th:href="@{'/categoria/editar/' + ${c.id}}"><i class="fa fa-edit"></i></a>
+                  <a data-toggle="modal" data-target=".remove-categoria-modal" onclick="eliminarCategoriaDialog(this);"
+                     th:data-categoria-id="${c.id}" th:data-categoria-name="${c.nombre}" style="cursor: pointer;">
+                    <i class="fa fa-remove"></i><!-- llena de datos(id,nombre) el modal con la catagoria que se va a l¿elimianr -->
+                  </a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page content -->
+
+    <div class="modal fade remove-categoria-modal" tabindex="-1"
+         role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Eliminar categoría</h4>
+          </div>
+          <div class="modal-body">
+            <p>Estás seguro de eliminar la categoría <br/><strong><span id="categoria-name"></span></strong>?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="eliminarCategoria();">Si!</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <th:block th:replace="layouts/footer :: footer"></th:block>
+
+  </div>
+</div>
+
+<th:block th:replace="layouts/scripts :: common"></th:block>
+<th:block th:replace="layouts/scripts :: datatable"></th:block>
+<script th:src="@{/custom/js/categoria/list.js}"></script>
+</body>
+</html>

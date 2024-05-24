@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spark LMS - Login</title>
+
+    <th:block th:replace="layouts/styles :: common"></th:block>
+
+</head>
+<body class="login">
+<header>
+    <div class="alert alert-success" th:if="${success != null}"
+         th:text="${success}"></div>
+    <div class="alert alert-danger" th:if="${error != null}"
+         th:text="${error}"></div>
+    <div class="alert alert-warning" th:if="${warning != null}"
+         th:text="${warning}"></div>
+    <div class="alert alert-info" th:if="${info != null}"
+         th:text="${info}"></div>
+</header>
+<div>
+
+    <div class="login_wrapper">
+        <section class="login_content">
+            <form th:action="@{/login}" method="post" id="loginform">
+                <h1>Login </h1>
+                <div>
+                    <input type="text" class="form-control" placeholder="Username" name="username" />
+                </div>
+                <div>
+                    <input type="password" class="form-control" placeholder="Password" name="password" />
+                </div>
+                <div>
+                    <div>
+                        <a class="btn btn-default submit" href="javascript:void(0)" onclick="document.getElementById('loginform').submit();"> Ingresar</a>
+                    </div>
+                </div>
+
+                <div class="separator">
+                    <br />
+                    <div>
+                        <h1><i class="fa fa-book" aria-hidden="true"></i> Sistema de prestamos de libros</h1>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+</body>
+</html>
